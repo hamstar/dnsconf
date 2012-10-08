@@ -24,7 +24,14 @@ class DnsApp
     while true do
       print "dns> "
       input = STDIN.gets
-      process_input input.chomp
+
+      begin
+        process_input input.chomp
+      rescue => e
+        puts "Error occured!"
+        puts e.message
+        puts e.backtrace
+      end
     end
   end
 
