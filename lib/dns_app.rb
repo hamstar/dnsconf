@@ -4,6 +4,7 @@ class DnsApp
 
     @action=args[0]	# one of new, edit, rm
     @domain=args[1]  # the domain name
+    @email="hostmaster@#{@domain}"
 
   end
 
@@ -37,15 +38,16 @@ class DnsApp
 
   def process_input(input)
 
-    case input
+    case input # simple commands start here
     when "exit", "x", "q", "quit"
       exit
-    when "list"
+    when "list", "l"
       list
-    when "save"
+    when "save", "s"
       save
     else
-      case
+      # More advanced commands start here
+      case 
       when input.start_with?("add")
         add input
       when input.start_with?("rm")
