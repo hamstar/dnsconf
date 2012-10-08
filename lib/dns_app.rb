@@ -3,9 +3,7 @@ class DnsApp
   def initialize(args)
 
     @action=args[0]	# one of new, edit, rm
-    @object=args[1]	# should be zone
-    @type=args[2]	# one of master, slave, stub
-    @domain=args[3]  # the domain name
+    @domain=args[1]  # the domain name
 
   end
 
@@ -13,7 +11,7 @@ class DnsApp
 
   	case @action
     when "new"
-      puts "Creating new #{@type} zone from #{@domain}"
+      puts "Creating new master zone for #{@domain}"
       @rules = []
       show_prompt
     else
@@ -36,16 +34,25 @@ class DnsApp
     when "exit", "x", "q", "quit"
       exit
     when "list"
-      puts "No rules yet" if @rules.empty?
-      @rules.each_with_index do |r,i|
-      	puts "[#{i}] #{r}"
-      end
+      list
+    when "save"
+      save
     else
-      if input.start_with?("add")
+      case
+      when input.start_with?("add")
         add input
+      when input.start_with?("rm")
+        rm input
       else
         puts "Unknown command: #{input}"
       end
+    end
+  end
+
+  def list
+    puts "No rules yet" if @rules.empty?
+    @rules.each_with_index do |r,i|
+      puts "[#{i}] #{r}"
     end
   end
 
@@ -56,5 +63,14 @@ class DnsApp
   	to = args[3]
     @rules << "#{from}\tIN\t#{type}\t#{to}"
     puts "Added #{type} record for #{from}.#{@domain} to #{to}"
+  end
+
+  def rm(args)
+    index = args.split(" ")[1].to_i
+    @rules.delete_at(index)
+  end
+
+  def save
+    puts "save the rules"
   end
 end
