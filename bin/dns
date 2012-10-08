@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+
+# dns new zone master example.com
+
+require '../lib/dns_app'
+
+app = DnsApp.new ARGV
+app.run
